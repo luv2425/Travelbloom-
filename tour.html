@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TravelBloom — Travel Recommendations</title>
+<meta name="description" content="Travel recommendation site with interactive filtering, destination details and multimedia content." />
+<style>
+  :root{
+    --bg: #6499ce;
+    --card: #ffffff;
+    --accent: #e9f0f7;
+    --accent-2: #00a896;
+    --muted: #0f629c;
+    --shadow: 0 12px 30px rgba(8,20,40,0.08);
+    --glass: rgba(209, 16, 16, 0.7);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#091a2c;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+
+  /* Header / Nav */
+  header.header{
+    position:sticky;top:0;z-index:60;
+    background:linear-gradient(90deg, rgba(10,12,18,0.95), rgba(226, 228, 233, 0.65));
+    color:white;padding:12px 20px;display:flex;align-items:center;gap:18px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;
+  }
+  .brand svg{width:36px;height:36px;opacity:0.95}
+  nav.topnav{display:flex;gap:18px;margin-left:20px}
+  nav.topnav a{color:#e6f0fb;padding:8px 10px;border-radius:6px;font-weight:600}
+  nav.topnav a:hover{background:rgba(224, 67, 67, 0.521);text-decoration:underline;font-weight:800}
+
+  .searchbox{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .searchbox input{padding:8px 12px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);min-width:220px;backgroundcolor:white}
+  .searchbox button{background:var(--accent);border:none;color:rgb(15, 15, 15);padding:8px 12px;border-radius:20px;cursor:pointer;font-weight:700}
+
+  /* Hero */
+  .hero{
+    position:relative;height:320px;display:flex;align-items:center;
+    background-image:linear-gradient(90deg, rgba(228, 232, 235, 0.6), rgba(9,43,61,0.2)),
+    color:rgb(255, 255, 255);padding:36px 20px;
+  }
+  .hero-inner{max-width:1200px;margin:0 auto;display:flex;gap:24px;align-items:center;width:100%}
+  .hero-left{flex:1}
+  .hero h1{font-size:56px;margin:0 0 8px 0;line-height:0.9;letter-spacing:1px}
+  .hero p{margin:10px 0 0 0;color:rgba(255, 255, 255, 0.9);max-width:640px}
+  .hero-cta{margin-top:18px;display:flex;gap:12px;align-items:center}
+  .btn{background:var(--accent);color:rgb(49, 19, 187);padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+  .btn.ghost{background-color:#e6f0fb;border:1px solid rgb(88, 44, 44)}
+
+  /* Main layout */
+  .container{max-width:1200px;margin:-60px auto 40px;padding:0 20px;display:grid;grid-template-columns:1fr 320px;gap:20px}
+  @media (max-width:980px){ .container{grid-template-columns:1fr} .hero{height:300px} .hero h1{font-size:36px} }
+
+  /* Controls */
+  .controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .control{background:var(--card);padding:10px;border-radius:10px;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
+  select,input[type="text"]{border:1px solid #e9eef5;padding:8px;border-radius:8px}
+
+  /* Destination grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .18s}
+  .card:hover{transform:translateY(-6px)}
+  .card img{width:100%;height:160px;object-fit:cover;display:block}
+  .card .body{padding:12px;display:flex;flex-direction:column;gap:8px}
+  .meta{display:flex;justify-content:space-between;align-items:center}
+  .pill{background:#eef8ff;color:var(--accent);padding:6px 8px;border-radius:999px;font-weight:800;font-size:12px}
+
+  /* Side panel */
+  .side{display:flex;flex-direction:column;gap:12px}
+  .panel{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow)}
+  .fav-list{display:flex;flex-direction:column;gap:8px}
+  .fav-item{display:flex;gap:10px;align-items:center;padding:10px;border-radius:8px;border:1px solid #eef6fb}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(4,10,18,0.5);z-index:80}
+  .modal .panel{width:min(980px,96%);max-height:90vh;overflow:auto;background:var(--card);border-radius:12px;padding:16px;box-shadow:0 30px 60px rgba(2,10,20,0.4)}
+  .media-grid{display:grid;grid-template-columns:1fr 320px;gap:14px}
+  .carousel{display:flex;gap:8px;overflow:auto;padding-bottom:8px}
+  .carousel img{height:220px;border-radius:8px;object-fit:cover}
+
+  /* Footer */
+  footer{margin:20px auto;text-align:center;color:var(--muted)}
+
+  /* small */
+  .muted{color:var(--muted);font-size:14px}
+  .hidden{display:none}
+  .small{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand" aria-hidden="true">
+    <!-- simple plane icon -->
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12l20-7-7 7 7 7-20-7z" fill="white"/></svg>
+    TravelBloom
+  </div>
+
+  <nav class="topnav" role="navigation" aria-label="Main navigation">
+    <a href="#home">Home</a>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact Us</a>
+  </nav>
+
+  <div class="searchbox" role="search" aria-label="Search">
+    <input id="search" placeholder="Enter a destination or keyword" aria-label="Search destinations" />
+    <button id="searchBtn" class="btn">Search</button>
+    <button id="Btn" class="btn ghost">Clear</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero" aria-label="Home banner">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>Explore<br>Dream<br>Destination</h1>
+      <p>Discover personalized travel recommendations and multimedia-rich destination pages to plan your memorable trip.</p>
+      <div class="hero-cta">
+       
+       
+    </div>
+    <div style="width:320px;min-width:220px"></div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="container" role="main">
+  <section>
+    <div class="panel" style="margin-bottom:12px">
+      <!-- filters & controls -->
+      <div class="controls" role="region" aria-label="Filters">
+        <div class="control">
+          <label for="climate">Climate</label>
+          <select id="climate">
+            <option value="any">Any</option>
+            <option value="tropical">Tropical</option>
+            <option value="temperate">Temperate</option>
+            <option value="arid">Arid</option>
+            <option value="cold">Cold</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="budget">Budget</label>
+          <select id="budget">
+            <option value="any">Any</option>
+            <option value="low">Low (&lt;$700)</option>
+            <option value="mid">Mid ($700–$2000)</option>
+            <option value="high">High (&gt;$2000)</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="activity">Activity</label>
+          <select id="activity">
+            <option value="any">Any</option>
+            <option value="beach">Beach</option>
+            <option value="hiking">Hiking</option>
+            <option value="culture">Culture</option>
+            <option value="food">Food</option>
+            <option value="wildlife">Wildlife</option>
+          </select>
+        </div>
+
+        <div style="margin-left:auto;display:flex;gap:8px;">
+          <button id="resetFilters" class="btn ghost">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- results grid -->
+    <section id="results" class="grid" aria-live="polite" aria-label="Search results">
+      <!-- JS will inject cards here -->
+    </section>
+  </section>
+
+  <!-- side -->
+  <aside class="side">
+    <div class="panel">
+      <strong>Favorites</strong>
+      <div id="favorites" class="fav-list small">
+        <div class="muted">No favorites yet. Click &quot;Save&quot; on a destination.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <strong>Contact</strong>
+      <p class="small">Email: hello@travelbloom.com</p>
+      <p class="small">Phone: +91 9876543210</p>
+    </div>
+  </aside>
+</main>
+
+<!-- ABOUT & CONTACT sections -->
+<section id="about" style="max-width:1100px;margin:24px auto;padding:20px">
+  <div class="panel">
+    <h2>About TravelBloom</h2>
+    <p class="muted">TravelBloom helps users discover ideal destinations based on their preferences. We provide multimedia-rich destination pages, personalized recommendations and easy planning tools to make travel decisions simple and delightful.</p>
+  </div>
+</section>
+
+<section id="contact" style="max-width:1100px;margin:8px auto 60px;padding:20px">
+  <div class="panel">
+    <h2>Contact Us</h2>
+    <p class="muted">Reach out for partnerships or support: hello@travelbloom.com</p>
+  </div>
+</section>
+
+<footer><small class="small">© TravelBloom — demo travel recommendation site</small></footer>
+
+<!-- Destination modal -->
+<div id="modal" class="modal" role="dialog" aria-hidden="true">
+  <div class="panel" role="document">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div>
+        <h2 id="modalTitle" style="margin:0"></h2>
+        <div id="modalSub" class="small muted"></div>
+      </div>
+      <div>
+        <button id="modalClose" class="btn ghost">Close</button>
+      </div>
+    </div>
+
+    <div class="media-grid">
+      <div>
+        <div id="carousel" class="carousel" aria-hidden="false"></div>
+        <p id="modalDesc" class="muted" style="margin-top:12px"></p>
+        <div style="margin-top:12px">
+          <strong>Highlights</strong>
+          <ul id="modalHigh" class="small muted"></ul>
+        </div>
+      </div>
+
+      <aside style="min-width:220px">
+        <div style="background:#f8fbff;padding:12px;border-radius:10px;border:1px solid #fbf0e6">
+          <div style="margin-bottom:8px"><strong id="modalBudget"></strong><div class="small muted">Estimated budget</div></div>
+          <div style="margin-bottom:8px"><strong id="modalClimate"></strong><div class="small muted">Climate</div></div>
+          <div style="margin-bottom:8px"><strong id="modalActivity"></strong><div class="small muted">Popular activity</div></div>
+
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="saveFav" class="btn">Save</button>
+            <button id="openMap" class="btn ghost">Open map</button>
+          </div>
+        </div>
+
+        <div id="modalVideo" style="margin-top:12px"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Data ---------- */
+const DESTINATIONS = [
+  {
+    id: 'bali',
+    name: 'Bali',
+    country: 'Indonesia',
+    climate: 'tropical',
+    budget: 'mid',
+    activity: 'beach',
+    images: [
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=60',
+      'https://images.unsplash.com/photo-1518684079-5b5f5d3f2f7a?w=1200&q=60'
+    ],
+    
+    description: 'Bali is a tropical island paradise with beaches, rice terraces and temples.',
+    highlights: ['Beaches & surf','Temple visits','Balinese cuisine']
+  },
+  {
+    id:'iceland',
+    name:'Iceland',
+    country:'Iceland',
+    climate:'cold',
+    budget:'high',
+    activity:'hiking',
+    images:[
+      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=60',
+      'https://images.unsplash.com/photo-1479899769602-7a9b4c9f0b98?w=1200&q=60'
+    ],
+   
+    description:'Iceland offers dramatic landscapes—glaciers, volcanoes and northern lights.',
+    highlights:['Glaciers','Hot springs','Northern Lights']
+  },
+  {
+    id:'lisbon',
+    name:'Lisbon',
+    country:'Portugal',
+    climate:'temperate',
+    budget:'mid',
+    activity:'culture',
+    images:[
+      'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?w=1200&q=60',
+      'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=60'
+    ],
+   
+    description:'Lisbon is a colorful city with historic neighborhoods and great food.',
+    highlights:['Historic neighborhoods','Food & cafés','Sea views']
+  },
+  {
+    id:'maasai',
+    name:'Maasai Mara',
+    country:'Kenya',
+    climate:'arid',
+    budget:'high',
+    activity:'wildlife',
+    images:[
+      'https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=1200&q=60',
+      'https://images.unsplash.com/photo-1508780709619-79562169bc64?w=1200&q=60'
+    ],
+    
+    description:'A premier safari destination with dramatic wildlife encounters.',
+    highlights:['Safari','Big Five','Migration']
+  },
+  
+  
+];
+
+/* ---------- DOM references ---------- */
+const resultsEl = document.getElementById('results');
+const climateEl = document.getElementById('climate');
+const budgetEl = document.getElementById('budget');
+const activityEl = document.getElementById('activity');
+const searchEl = document.getElementById('search');
+const searchBtn = document.getElementById('searchBtn');
+const clearBtn = document.getElementById('clearBtn');
+const recommendBtn = document.getElementById('recommendBtn');
+const resetFilters = document.getElementById('resetFilters');
+
+const favoritesEl = document.getElementById('favorites');
+
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modalTitle');
+const modalSub = document.getElementById('modalSub');
+const modalDesc = document.getElementById('modalDesc');
+const modalHigh = document.getElementById('modalHigh');
+const modalBudget = document.getElementById('modalBudget');
+const modalClimate = document.getElementById('modalClimate');
+const modalActivity = document.getElementById('modalActivity');
+const carousel = document.getElementById('carousel');
+const modalVideo = document.getElementById('modalVideo');
+const modalClose = document.getElementById('modalClose');
+const saveFavBtn = document.getElementById('saveFav');
+const openMapBtn = document.getElementById('openMap');
+
+/* ---------- State ---------- */
+let filtered = [...DESTINATIONS];
+let favorites = JSON.parse(localStorage.getItem('tb_favorites') || '[]');
+
+/* ---------- Helpers ---------- */
+function saveFavs(){ localStorage.setItem('tb_favorites', JSON.stringify(favorites)); renderFavs(); }
+function renderFavs(){
+  favoritesEl.innerHTML = '';
+  if(!favorites.length){
+    favoritesEl.innerHTML = '<div class="muted small">No favorites yet. Save destinations to quickly access them here.</div>';
+    return;
+  }
+  favorites.forEach(f=>{
+    const div = document.createElement('div'); div.className = 'fav-item';
+    div.innerHTML = `<div style="width:44px;height:44px;border-radius:8px;background:#eee;display:flex;align-items:center;justify-content:center;font-weight:700">${f.name.charAt(0)}</div>
+      <div style="flex:1"><strong>${f.name}</strong><div class="small muted">${f.country}</div></div>
+      <div><button class="btn ghost" data-remove="${f.id}">Remove</button></div>`;
+    favoritesEl.appendChild(div);
+    div.querySelector('[data-remove]').addEventListener('click', ()=>{
+      favorites = favorites.filter(x=>x.id!==f.id); saveFavs();
+    })
+  });
+}
+
+function renderCards(list){
+  resultsEl.innerHTML = '';
+  if(!list.length){
+    resultsEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">No destinations found. Try different filters.</div>';
+    return;
+  }
+  list.forEach(d=>{
+    const el = document.createElement('article'); el.className='card';
+    el.innerHTML = `
+      <img src="${d.images[0]}" alt="${d.name}" loading="lazy" />
+      <div class="body">
+        <div class="meta"><div class="small muted">${d.country}</div><div class="pill">${d.activity.toUpperCase()}</div></div>
+        <h3>${d.name}</h3>
+        <p class="muted small">${d.description}</p>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn" data-open="${d.id}">View</button>
+          <button class="btn ghost" data-save="${d.id}">Save</button>
+        </div>
+      </div>
+    `;
+    resultsEl.appendChild(el);
+
+    el.querySelector('[data-open]').addEventListener('click', ()=> openModal(d.id));
+    el.querySelector('[data-save]').addEventListener('click', ()=>{
+      if(!favorites.find(f=>f.id===d.id)){ favorites.push({id:d.id,name:d.name,country:d.country,thumb:d.images[0]}); saveFavs(); }
+    });
+  });
+}
+
+/* ---------- Filters & Search ---------- */
+function applyFilters(){
+  const climate = climateEl.value;
+  const budget = budgetEl.value;
+  const activity = activityEl.value;
+  const q = (searchEl.value || '').trim().toLowerCase();
+
+  filtered = DESTINATIONS.filter(d=>{
+    if(climate!=='any' && d.climate !== climate) return false;
+    if(budget!=='any' && d.budget !== budget) return false;
+    if(activity!=='any' && d.activity !== activity) return false;
+    if(q){
+      const hay = (d.name + ' ' + d.country + ' ' + d.description).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  renderCards(filtered);
+}
+
+/* ---------- Recommend algorithm (simple scoring) ---------- */
+function recommend(){
+  const cov = {climate:climateEl.value,budget:budgetEl.value,activity:activityEl.value,query:searchEl.value.trim()};
+  // score
+  const scored = DESTINATIONS.map(d=>{
+    let score = 0;
+    if(cov.climate!=='any' && d.climate === cov.climate) score+=3;
+    if(cov.budget!=='any' && d.budget === cov.budget) score+=2;
+    if(cov.activity!=='any' && d.activity === cov.activity) score+=4;
+    if(cov.query && (d.name.toLowerCase().includes(cov.query.toLowerCase()))) score += 2;
+    // mild popularity bias
+    if(d.budget === 'mid') score += 0.5;
+    return {...d,score};
+  });
+  scored.sort((a,b)=>b.score - a.score);
+  if(scored[0].score <= 0){
+    alert('No strong match found — showing popular picks.');
+    renderCards(scored.slice(0,3));
+    return;
+  }
+  // show top
+  renderCards([scored[0], ...scored.slice(1,5)]);
+  // open modal for top suggestion
+  setTimeout(()=> openModal(scored[0].id), 220);
+}
+
+/* ---------- Modal ---------- */
+function openModal(id){
+  const d = DESTINATIONS.find(x=>x.id===id);
+  if(!d) return;
+  modalTitle.textContent = d.name;
+  modalSub.textContent = `${d.country}`;
+  modalDesc.textContent = d.description;
+  modalBudget.textContent = d.budget === 'low'? 'Low' : d.budget==='mid'? 'Moderate' : 'High';
+  modalClimate.textContent = d.climate.charAt(0).toUpperCase() + d.climate.slice(1);
+  modalActivity.textContent = d.activity.charAt(0).toUpperCase() + d.activity.slice(1);
+  modalHigh.innerHTML = '';
+  d.highlights.forEach(h=> { const li = document.createElement('li'); li.textContent = h; modalHigh.appendChild(li); });
+
+  carousel.innerHTML = '';
+  d.images.forEach(url=>{
+    const im = document.createElement('img'); im.src = url; im.alt = d.name; carousel.appendChild(im);
+  });
+
+  modalVideo.innerHTML = '';
+  if(d.video){
+    const iframe = document.createElement('iframe');
+    iframe.src = d.video;
+    iframe.width = '100%'; iframe.height = '200'; iframe.frameBorder = 0; iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    modalVideo.appendChild(iframe);
+  }
+
+  // Save favorite inside modal
+  document.getElementById('saveFav')?.remove?.(); // remove if exists (older browsers)
+  // set save button behavior
+  const saveBtn = document.getElementById('saveFav') || document.createElement('button');
+  saveBtn.id = 'saveFav';
+  saveBtn.className = 'btn';
+  saveBtn.textContent = 'Save';
+  saveBtn.onclick = ()=> {
+    if(!favorites.find(f=>f.id===d.id)){ favorites.push({id:d.id,name:d.name,country:d.country,thumb:d.images[0]}); saveFavs(); alert('Saved to favorites'); }
+    else alert('Already in favorites');
+  };
+
+  const aside = modal.querySelector('aside > div');
+  if(aside){
+    // append or replace save button
+    const exist = aside.querySelector('#saveFav');
+    if(!exist) aside.querySelector('div:last-child')?.appendChild(saveBtn);
+  }
+
+  // open map button
+  document.getElementById('openMap')?.remove?.();
+  const openMapBtn = document.createElement('button');
+  openMapBtn.id = 'openMap';
+  openMapBtn.className = 'btn ghost';
+  openMapBtn.textContent = 'Open map';
+  openMapBtn.onclick = ()=> {
+    const q = encodeURIComponent(d.name + ', ' + d.country);
+    window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
+  };
+  const asideDiv = modal.querySelector('aside > div');
+  if(asideDiv && !asideDiv.querySelector('#openMap')) asideDiv.querySelector('div:last-child')?.appendChild(openMapBtn);
+
+  // show modal
+  modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); document.body.style.overflow = '';
+}
+
+/* ---------- Init ---------- */
+renderCards(DESTINATIONS);
+renderFavs();
+
+/* ---------- Event listeners ---------- */
+searchBtn.addEventListener('click', applyFilters);
+clearBtn.addEventListener('click', ()=> { searchEl.value=''; applyFilters(); });
+[climateEl,budgetEl,activityEl].forEach(sel=> sel.addEventListener('change', applyFilters));
+resetFilters.addEventListener('click', ()=> { climateEl.value='any'; budgetEl.value='any'; activityEl.value='any'; searchEl.value=''; applyFilters(); });
+
+recommendBtn.addEventListener('click', recommend);
+
+document.addEventListener('keydown', (e)=> {
+  if(e.key === 'Escape') closeModal();
+});
+
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* Accessibility: smooth scroll for nav links */
+document.querySelectorAll('nav.topnav a').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+</script>
+</body>
+</html>

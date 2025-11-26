@@ -9,9 +9,9 @@
   :root{
     --bg: #6499ce;
     --card: #ffffff;
-    --accent: #e9f0f7;
+    --accent: #167adf;
     --accent-2: #00a896;
-    --muted: #0f629c;
+    --muted: #000000;
     --shadow: 0 12px 30px rgba(8,20,40,0.08);
     --glass: rgba(209, 16, 16, 0.7);
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -23,7 +23,7 @@
   /* Header / Nav */
   header.header{
     position:sticky;top:0;z-index:60;
-    background:linear-gradient(90deg, rgba(10,12,18,0.95), rgba(226, 228, 233, 0.65));
+    background:linear-gradient(90deg, rgba(32, 71, 190, 0.95), rgba(226, 228, 233, 0.65));
     color:white;padding:12px 20px;display:flex;align-items:center;gap:18px;
   }
   .brand{
@@ -31,18 +31,18 @@
   }
   .brand svg{width:36px;height:36px;opacity:0.95}
   nav.topnav{display:flex;gap:18px;margin-left:20px}
-  nav.topnav a{color:#e6f0fb;padding:8px 10px;border-radius:6px;font-weight:600}
+  nav.topnav a{color:#e6fbf5;padding:8px 10px;border-radius:6px;font-weight:600}
   nav.topnav a:hover{background:rgba(224, 67, 67, 0.521);text-decoration:underline;font-weight:800}
 
   .searchbox{margin-left:auto;display:flex;gap:8px;align-items:center}
-  .searchbox input{padding:8px 12px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);min-width:220px;backgroundcolor:white}
+  .searchbox input{padding:8px 12px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);min-width:220px;background-color:white}
   .searchbox button{background:var(--accent);border:none;color:rgb(15, 15, 15);padding:8px 12px;border-radius:20px;cursor:pointer;font-weight:700}
 
   /* Hero */
   .hero{
     position:relative;height:320px;display:flex;align-items:center;
-    background-image:linear-gradient(90deg, rgba(228, 232, 235, 0.6), rgba(9,43,61,0.2)),
-    color:rgb(255, 255, 255);padding:36px 20px;
+    
+    color:rgb(253, 254, 255);padding:36px 20px;
   }
   .hero-inner{max-width:1200px;margin:0 auto;display:flex;gap:24px;align-items:center;width:100%}
   .hero-left{flex:1}
@@ -59,7 +59,7 @@
   /* Controls */
   .controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
   .control{background:var(--card);padding:10px;border-radius:10px;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
-  select,input[type="text"]{border:1px solid #e9eef5;padding:8px;border-radius:8px}
+  select,input[type="text"]{border:1px solid #2b5ea5;padding:8px;border-radius:8px}
 
   /* Destination grid */
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
@@ -68,7 +68,7 @@
   .card img{width:100%;height:160px;object-fit:cover;display:block}
   .card .body{padding:12px;display:flex;flex-direction:column;gap:8px}
   .meta{display:flex;justify-content:space-between;align-items:center}
-  .pill{background:#eef8ff;color:var(--accent);padding:6px 8px;border-radius:999px;font-weight:800;font-size:12px}
+  .pill{background:#eefff1;color:var(--accent);padding:6px 8px;border-radius:999px;font-weight:800;font-size:12px}
 
   /* Side panel */
   .side{display:flex;flex-direction:column;gap:12px}
@@ -90,6 +90,25 @@
   .muted{color:var(--muted);font-size:14px}
   .hidden{display:none}
   .small{font-size:13px;color:var(--muted)}
+
+  /* Contact form */
+  #contactForm .form-row{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:10px;
+  }
+  #contactForm label{
+    font-size:14px;
+    margin-bottom:4px;
+  }
+  #contactForm input,
+  #contactForm textarea{
+    border:1px solid #e9eef5;
+    border-radius:8px;
+    padding:8px;
+    font-family:inherit;
+    font-size:14px;
+  }
 </style>
 </head>
 <body>
@@ -104,13 +123,16 @@
   <nav class="topnav" role="navigation" aria-label="Main navigation">
     <a href="#home">Home</a>
     <a href="#about">About Us</a>
+    <a href="#beach">Beaches</a>
+    <a href="#temples">Temples</a>
+    <a href="#country">By Country</a>
     <a href="#contact">Contact Us</a>
   </nav>
 
   <div class="searchbox" role="search" aria-label="Search">
     <input id="search" placeholder="Enter a destination or keyword" aria-label="Search destinations" />
     <button id="searchBtn" class="btn">Search</button>
-    <button id="Btn" class="btn ghost">Clear</button>
+    <button id="clearBtn" class="btn ghost">Clear</button>
   </div>
 </header>
 
@@ -122,7 +144,7 @@
       <p>Discover personalized travel recommendations and multimedia-rich destination pages to plan your memorable trip.</p>
       <div class="hero-cta">
        
-       
+      </div>
     </div>
     <div style="width:320px;min-width:220px"></div>
   </div>
@@ -196,22 +218,114 @@
   </aside>
 </main>
 
-<!-- ABOUT & CONTACT sections -->
+<!-- ABOUT -->
 <section id="about" style="max-width:1100px;margin:24px auto;padding:20px">
   <div class="panel">
     <h2>About TravelBloom</h2>
-    <p class="muted">TravelBloom helps users discover ideal destinations based on their preferences. We provide multimedia-rich destination pages, personalized recommendations and easy planning tools to make travel decisions simple and delightful.</p>
+    <p class="muted">
+      TravelBloom helps users discover ideal destinations based on their preferences. We provide multimedia-rich
+      destination pages, personalized recommendations and easy planning tools to make travel decisions simple and
+      delightful.
+    </p>
   </div>
 </section>
 
+<!-- BEACH RECOMMENDATION (2 images) -->
+<section id="beach" style="max-width:1100px;margin:24px auto;padding:20px">
+  <div class="panel">
+    <h2>Beach Recommendations</h2>
+    <p class="muted">Sun, sand and sea — perfect getaways for beach lovers.</p>
+    <div class="grid">
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=60" alt="Bali Beach">
+        <div class="body">
+          <h3>Bali, Indonesia</h3>
+          <p class="small muted">Golden beaches, surfing spots and vibrant seaside cafés.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1518684079-5b5f5d3f2f7a?w=1200&q=60" alt="Coastal cliffs">
+        <div class="body">
+          <h3>Island Escape</h3>
+          <p class="small muted">Dramatic coastlines and clear blue waters for a relaxing holiday.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- TEMPLE RECOMMENDATION (2 images) -->
+<section id="temples" style="max-width:1100px;margin:24px auto;padding:20px">
+  <div class="panel">
+    <h2>Temple Recommendations</h2>
+    <p class="muted">Peaceful spiritual destinations surrounded by history and culture.</p>
+    <div class="grid">
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=60" alt="Historic city with cathedral">
+        <div class="body">
+          <h3>Old Town Temple</h3>
+          <p class="small muted">Walk through narrow streets and visit beautifully decorated temples.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1508780709619-79562169bc64?w=1200&q=60" alt="Building at sunset">
+        <div class="body">
+          <h3>Sunset Shrine</h3>
+          <p class="small muted">Enjoy calm evenings and traditional ceremonies near the shrine.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTRY-BASED RECOMMENDATION (2 images) -->
+<section id="country" style="max-width:1100px;margin:24px auto;padding:20px">
+  <div class="panel">
+    <h2>Recommendations by Country: India</h2>
+    <p class="muted">Two popular destinations to explore in India.</p>
+    <div class="grid">
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1508057198894-247b23fe5ade?w=1200&q=60" alt="Colorful city by the river">
+        <div class="body">
+          <h3>Coastal City Getaway</h3>
+          <p class="small muted">Enjoy colourful streets, heritage buildings and sea views.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=1200&q=60" alt="Wildlife landscape">
+        <div class="body">
+          <h3>Wildlife Adventure</h3>
+          <p class="small muted">Experience safaris, national parks and rich natural beauty.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT PAGE WITH EMAIL FORM -->
 <section id="contact" style="max-width:1100px;margin:8px auto 60px;padding:20px">
   <div class="panel">
     <h2>Contact Us</h2>
-    <p class="muted">Reach out for partnerships or support: hello@travelbloom.com</p>
+    <p class="muted">Have questions or need help planning your trip? Send us a message.</p>
+    <form id="contactForm">
+      <div class="form-row">
+        <label for="name">Name</label>
+        <input id="name" type="text" required>
+      </div>
+      <div class="form-row">
+        <label for="email">Email</label>
+        <input id="email" type="email" required>
+      </div>
+      <div class="form-row">
+        <label for="message">Message</label>
+        <textarea id="message" rows="4" required></textarea>
+      </div>
+      <button type="submit" class="btn">Send message</button>
+    </form>
   </div>
 </section>
 
-<footer><small class="small">© TravelBloom — demo travel recommendation site</small></footer>
+<footer><small class="small">© TravelBloom — travel recommendation site</small></footer>
 
 <!-- Destination modal -->
 <div id="modal" class="modal" role="dialog" aria-hidden="true">
@@ -268,7 +382,6 @@ const DESTINATIONS = [
       'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=60',
       'https://images.unsplash.com/photo-1518684079-5b5f5d3f2f7a?w=1200&q=60'
     ],
-    
     description: 'Bali is a tropical island paradise with beaches, rice terraces and temples.',
     highlights: ['Beaches & surf','Temple visits','Balinese cuisine']
   },
@@ -283,7 +396,6 @@ const DESTINATIONS = [
       'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=60',
       'https://images.unsplash.com/photo-1479899769602-7a9b4c9f0b98?w=1200&q=60'
     ],
-   
     description:'Iceland offers dramatic landscapes—glaciers, volcanoes and northern lights.',
     highlights:['Glaciers','Hot springs','Northern Lights']
   },
@@ -298,7 +410,6 @@ const DESTINATIONS = [
       'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?w=1200&q=60',
       'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=60'
     ],
-   
     description:'Lisbon is a colorful city with historic neighborhoods and great food.',
     highlights:['Historic neighborhoods','Food & cafés','Sea views']
   },
@@ -313,12 +424,9 @@ const DESTINATIONS = [
       'https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=1200&q=60',
       'https://images.unsplash.com/photo-1508780709619-79562169bc64?w=1200&q=60'
     ],
-    
     description:'A premier safari destination with dramatic wildlife encounters.',
     highlights:['Safari','Big Five','Migration']
-  },
-  
-  
+  }
 ];
 
 /* ---------- DOM references ---------- */
@@ -345,15 +453,16 @@ const modalActivity = document.getElementById('modalActivity');
 const carousel = document.getElementById('carousel');
 const modalVideo = document.getElementById('modalVideo');
 const modalClose = document.getElementById('modalClose');
-const saveFavBtn = document.getElementById('saveFav');
-const openMapBtn = document.getElementById('openMap');
 
 /* ---------- State ---------- */
 let filtered = [...DESTINATIONS];
 let favorites = JSON.parse(localStorage.getItem('tb_favorites') || '[]');
 
 /* ---------- Helpers ---------- */
-function saveFavs(){ localStorage.setItem('tb_favorites', JSON.stringify(favorites)); renderFavs(); }
+function saveFavs(){
+  localStorage.setItem('tb_favorites', JSON.stringify(favorites));
+  renderFavs();
+}
 function renderFavs(){
   favoritesEl.innerHTML = '';
   if(!favorites.length){
@@ -396,7 +505,10 @@ function renderCards(list){
 
     el.querySelector('[data-open]').addEventListener('click', ()=> openModal(d.id));
     el.querySelector('[data-save]').addEventListener('click', ()=>{
-      if(!favorites.find(f=>f.id===d.id)){ favorites.push({id:d.id,name:d.name,country:d.country,thumb:d.images[0]}); saveFavs(); }
+      if(!favorites.find(f=>f.id===d.id)){
+        favorites.push({id:d.id,name:d.name,country:d.country,thumb:d.images[0]});
+        saveFavs();
+      }
     });
   });
 }
@@ -424,14 +536,12 @@ function applyFilters(){
 /* ---------- Recommend algorithm (simple scoring) ---------- */
 function recommend(){
   const cov = {climate:climateEl.value,budget:budgetEl.value,activity:activityEl.value,query:searchEl.value.trim()};
-  // score
   const scored = DESTINATIONS.map(d=>{
     let score = 0;
     if(cov.climate!=='any' && d.climate === cov.climate) score+=3;
     if(cov.budget!=='any' && d.budget === cov.budget) score+=2;
     if(cov.activity!=='any' && d.activity === cov.activity) score+=4;
     if(cov.query && (d.name.toLowerCase().includes(cov.query.toLowerCase()))) score += 2;
-    // mild popularity bias
     if(d.budget === 'mid') score += 0.5;
     return {...d,score};
   });
@@ -441,9 +551,7 @@ function recommend(){
     renderCards(scored.slice(0,3));
     return;
   }
-  // show top
   renderCards([scored[0], ...scored.slice(1,5)]);
-  // open modal for top suggestion
   setTimeout(()=> openModal(scored[0].id), 220);
 }
 
@@ -466,46 +574,7 @@ function openModal(id){
   });
 
   modalVideo.innerHTML = '';
-  if(d.video){
-    const iframe = document.createElement('iframe');
-    iframe.src = d.video;
-    iframe.width = '100%'; iframe.height = '200'; iframe.frameBorder = 0; iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    modalVideo.appendChild(iframe);
-  }
 
-  // Save favorite inside modal
-  document.getElementById('saveFav')?.remove?.(); // remove if exists (older browsers)
-  // set save button behavior
-  const saveBtn = document.getElementById('saveFav') || document.createElement('button');
-  saveBtn.id = 'saveFav';
-  saveBtn.className = 'btn';
-  saveBtn.textContent = 'Save';
-  saveBtn.onclick = ()=> {
-    if(!favorites.find(f=>f.id===d.id)){ favorites.push({id:d.id,name:d.name,country:d.country,thumb:d.images[0]}); saveFavs(); alert('Saved to favorites'); }
-    else alert('Already in favorites');
-  };
-
-  const aside = modal.querySelector('aside > div');
-  if(aside){
-    // append or replace save button
-    const exist = aside.querySelector('#saveFav');
-    if(!exist) aside.querySelector('div:last-child')?.appendChild(saveBtn);
-  }
-
-  // open map button
-  document.getElementById('openMap')?.remove?.();
-  const openMapBtn = document.createElement('button');
-  openMapBtn.id = 'openMap';
-  openMapBtn.className = 'btn ghost';
-  openMapBtn.textContent = 'Open map';
-  openMapBtn.onclick = ()=> {
-    const q = encodeURIComponent(d.name + ', ' + d.country);
-    window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
-  };
-  const asideDiv = modal.querySelector('aside > div');
-  if(asideDiv && !asideDiv.querySelector('#openMap')) asideDiv.querySelector('div:last-child')?.appendChild(openMapBtn);
-
-  // show modal
   modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false');
   document.body.style.overflow = 'hidden';
 }
@@ -526,27 +595,34 @@ resetFilters.addEventListener('click', ()=> { climateEl.value='any'; budgetEl.va
 
 recommendBtn.addEventListener('click', recommend);
 
-document.addEventListener('keydown', (e)=> {
-  if(e.key === 'Escape') closeModal();
-});
+
 
 modalClose.addEventListener('click', closeModal);
 modal.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
+document.addEventListener('keydown', (e)=> {
+  if(e.key === 'Escape') closeModal();
 });
 
 /* Accessibility: smooth scroll for nav links */
 document.querySelectorAll('nav.topnav a').forEach(a=>{
   a.addEventListener('click', (e)=>{
+    const href = a.getAttribute('href');
+    if(!href || !href.startsWith('#')) return;
     e.preventDefault();
-    const id = a.getAttribute('href').slice(1);
+    const id = href.slice(1);
     const el = document.getElementById(id);
     if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
   });
 });
 
+/* Simple contact form handler */
+const contactForm = document.getElementById('contactForm');
+contactForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  alert('Thank you for contacting TravelBloom!');
+  contactForm.reset();
+});
 </script>
 </body>
 </html>

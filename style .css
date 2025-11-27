@@ -1,0 +1,107 @@
+:root{
+    --bg: #6499ce;
+    --card: #ffffff;
+    --accent: #167adf;
+    --accent-2: #00a896;
+    --muted: #000000;
+    --shadow: 0 12px 30px rgba(8,20,40,0.08);
+    --glass: rgba(209, 16, 16, 0.7);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#091a2c;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  
+  /* Header / Nav */
+  header.header{
+    position:sticky;top:0;z-index:60;
+    background:linear-gradient(90deg, rgba(32, 71, 190, 0.95), rgba(226, 228, 233, 0.65));
+    color:white;padding:12px 20px;display:flex;align-items:center;gap:18px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;
+  }
+  .brand svg{width:36px;height:36px;opacity:0.95}
+  nav.topnav{display:flex;gap:18px;margin-left:20px}
+  nav.topnav a{color:#e6fbf5;padding:8px 10px;border-radius:6px;font-weight:600}
+  nav.topnav a:hover{background:rgba(224, 67, 67, 0.521);text-decoration:underline;font-weight:800}
+  
+  .searchbox{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .searchbox input{padding:8px 12px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);min-width:220px;background-color:white}
+  .searchbox button{background:var(--accent);border:none;color:rgb(15, 15, 15);padding:8px 12px;border-radius:20px;cursor:pointer;font-weight:700}
+  
+  /* Hero */
+  .hero{
+    position:relative;height:320px;display:flex;align-items:center;
+    color:rgb(253, 254, 255);padding:36px 20px;
+  }
+  .hero-inner{max-width:1200px;margin:0 auto;display:flex;gap:24px;align-items:center;width:100%}
+  .hero-left{flex:1}
+  .hero h1{font-size:56px;margin:0 0 8px 0;line-height:0.9;letter-spacing:1px}
+  .hero p{margin:10px 0 0 0;color:rgba(255, 255, 255, 0.9);max-width:640px}
+  .hero-cta{margin-top:18px;display:flex;gap:12px;align-items:center}
+  .btn{background:var(--accent);color:rgb(49, 19, 187);padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+  .btn.ghost{background-color:#e6f0fb;border:1px solid rgb(88, 44, 44)}
+  
+  /* Main layout */
+  .container{max-width:1200px;margin:-60px auto 40px;padding:0 20px;display:grid;grid-template-columns:1fr 320px;gap:20px}
+  @media (max-width:980px){
+    .container{grid-template-columns:1fr}
+    .hero{height:300px}
+    .hero h1{font-size:36px}
+  }
+  
+  /* Controls */
+  .controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .control{background:var(--card);padding:10px;border-radius:10px;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
+  select,input[type="text"]{border:1px solid #2b5ea5;padding:8px;border-radius:8px}
+  
+  /* Destination grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .18s}
+  .card:hover{transform:translateY(-6px)}
+  .card img{width:100%;height:160px;object-fit:cover;display:block}
+  .card .body{padding:12px;display:flex;flex-direction:column;gap:8px}
+  .meta{display:flex;justify-content:space-between;align-items:center}
+  .pill{background:#eefff1;color:var(--accent);padding:6px 8px;border-radius:999px;font-weight:800;font-size:12px}
+  
+  /* Side panel */
+  .side{display:flex;flex-direction:column;gap:12px}
+  .panel{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow)}
+  .fav-list{display:flex;flex-direction:column;gap:8px}
+  .fav-item{display:flex;gap:10px;align-items:center;padding:10px;border-radius:8px;border:1px solid #eef6fb}
+  
+  /* Modal */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(4,10,18,0.5);z-index:80}
+  .modal .panel{width:min(980px,96%);max-height:90vh;overflow:auto;background:var(--card);border-radius:12px;padding:16px;box-shadow:0 30px 60px rgba(2,10,20,0.4)}
+  .media-grid{display:grid;grid-template-columns:1fr 320px;gap:14px}
+  .carousel{display:flex;gap:8px;overflow:auto;padding-bottom:8px}
+  .carousel img{height:220px;border-radius:8px;object-fit:cover}
+  
+  /* Footer */
+  footer{margin:20px auto;text-align:center;color:var(--muted)}
+  
+  /* small */
+  .muted{color:var(--muted);font-size:14px}
+  .hidden{display:none}
+  .small{font-size:13px;color:var(--muted)}
+  
+  /* Contact form */
+  #contactForm .form-row{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:10px;
+  }
+  #contactForm label{
+    font-size:14px;
+    margin-bottom:4px;
+  }
+  #contactForm input,
+  #contactForm textarea{
+    border:1px solid #e9eef5;
+    border-radius:8px;
+    padding:8px;
+    font-family:inherit;
+    font-size:14px;
+  }
+  

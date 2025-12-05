@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TravelBloom — Contact Us</title>
+  <meta name="description" content="Contact TravelBloom for travel recommendations and assistance." />
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style .css">
+</head>
+<body>
+
+<header class="header">
+  <div class="brand" aria-hidden="true">
+    <!-- simple plane icon -->
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 12l20-7-7 7 7 7-20-7z" fill="white"/>
+    </svg>
+    TravelBloom
+  </div>
+
+  <nav class="topnav" role="navigation" aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+
+  <div class="searchbox" role="search" aria-label="Search">
+    <input id="search" placeholder="Enter a destination or keyword" aria-label="Search destinations" />
+    <button id="searchBtn" class="btn">Search</button>
+    <button id="clearBtn" class="btn ghost">Clear</button>
+  </div>
+</header>
+
+<!-- CONTACT PAGE WITH EMAIL FORM -->
+<section id="contact" style="max-width:1100px;margin:40px auto 60px;padding:20px">
+  <div class="panel">
+    <h2>Contact Us</h2>
+    <p class="muted" style="margin-bottom:20px">Have questions or need help planning your trip? Send us a message and we'll get back to you as soon as possible.</p>
+    
+    <form id="contactForm">
+      <div class="form-row">
+        <label for="name">Name</label>
+        <input id="name" type="text" required placeholder="Enter your full name">
+      </div>
+      <div class="form-row">
+        <label for="email">Email</label>
+        <input id="email" type="email" required placeholder="Enter your email address">
+      </div>
+      <div class="form-row">
+        <label for="message">Message</label>
+        <textarea id="message" rows="4" required placeholder="Tell us how we can help you..."></textarea>
+      </div>
+      <button type="submit" class="btn">Send message</button>
+    </form>
+
+    <div style="margin-top:30px;padding-top:20px;border-top:1px solid #e9eef5">
+      <h3>Other Ways to Reach Us</h3>
+      <p class="muted"><strong>Email:</strong> hello@travelbloom.com</p>
+      <p class="muted"><strong>Phone:</strong> +91 9876543210</p>
+      <p class="muted"><strong>Hours:</strong> Monday - Friday, 9:00 AM - 6:00 PM IST</p>
+    </div>
+  </div>
+</section>
+
+<footer><small class="small">© TravelBloom — travel recommendation site</small></footer>
+
+<!-- External JS -->
+<script src="script.js"></script>
+</body>
+</html>
+

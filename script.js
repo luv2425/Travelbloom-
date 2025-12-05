@@ -93,6 +93,7 @@ const DESTINATIONS = [
     renderFavs();
   }
   function renderFavs(){
+    if(!favoritesEl) return;
     favoritesEl.innerHTML = '';
     if(!favorites.length){
       favoritesEl.innerHTML = '<div class="muted small">No favorites yet. Save destinations to quickly access them here.</div>';
@@ -111,6 +112,7 @@ const DESTINATIONS = [
   }
   
   function renderCards(list){
+    if(!resultsEl) return;
     resultsEl.innerHTML = '';
     if(!list.length){
       resultsEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">No destinations found. Try different filters.</div>';
@@ -144,6 +146,7 @@ const DESTINATIONS = [
   
   /* ---------- Filters & Search ---------- */
   function applyFilters(){
+    if(!climateEl || !budgetEl || !activityEl || !searchEl) return;
     const climate = climateEl.value;
     const budget = budgetEl.value;
     const activity = activityEl.value;
@@ -164,6 +167,7 @@ const DESTINATIONS = [
   
   /* ---------- Recommend algorithm (simple scoring) ---------- */
   function recommend(){
+    if(!climateEl || !budgetEl || !activityEl || !searchEl) return;
     const cov = {climate:climateEl.value,budget:budgetEl.value,activity:activityEl.value,query:searchEl.value.trim()};
     const scored = DESTINATIONS.map(d=>{
       let score = 0;
@@ -186,6 +190,7 @@ const DESTINATIONS = [
   
   /* ---------- Modal ---------- */
   function openModal(id){
+    if(!modal || !modalTitle || !modalSub || !modalDesc || !modalBudget || !modalClimate || !modalActivity || !modalHigh || !carousel) return;
     const d = DESTINATIONS.find(x=>x.id===id);
     if(!d) return;
     modalTitle.textContent = d.name;
@@ -196,48 +201,57 @@ const DESTINATIONS = [
     modalActivity.textContent = d.activity.charAt(0).toUpperCase() + d.activity.slice(1);
     modalHigh.innerHTML = '';
     d.highlights.forEach(h=> { const li = document.createElement('li'); li.textContent = h; modalHigh.appendChild(li); });
-  
+
     carousel.innerHTML = '';
     d.images.forEach(url=>{
       const im = document.createElement('img'); im.src = url; im.alt = d.name; carousel.appendChild(im);
     });
-  
-    modalVideo.innerHTML = '';
-  
+
+    if(modalVideo) modalVideo.innerHTML = '';
+
     modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false');
     document.body.style.overflow = 'hidden';
   }
-  
+
   function closeModal(){
+    if(!modal) return;
     modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); document.body.style.overflow = '';
   }
   
   /* ---------- Init ---------- */
-  renderCards(DESTINATIONS);
-  renderFavs();
+  if(resultsEl && DESTINATIONS) {
+    renderCards(DESTINATIONS);
+  }
+  if(favoritesEl) {
+    renderFavs();
+  }
   
   /* ---------- Event listeners ---------- */
-  searchBtn.addEventListener('click', applyFilters);
-  clearBtn.addEventListener('click', ()=> { searchEl.value=''; applyFilters(); });
-  [climateEl,budgetEl,activityEl].forEach(sel=> sel.addEventListener('change', applyFilters));
-  resetFilters.addEventListener('click', ()=> {
-    climateEl.value='any';
-    budgetEl.value='any';
-    activityEl.value='any';
-    searchEl.value='';
-    applyFilters();
-  });
+  if(searchBtn) searchBtn.addEventListener('click', applyFilters);
+  if(clearBtn) clearBtn.addEventListener('click', ()=> { if(searchEl) { searchEl.value=''; applyFilters(); } });
+  if(climateEl && budgetEl && activityEl) {
+    [climateEl,budgetEl,activityEl].forEach(sel=> sel.addEventListener('change', applyFilters));
+  }
+  if(resetFilters) {
+    resetFilters.addEventListener('click', ()=> {
+      if(climateEl) climateEl.value='any';
+      if(budgetEl) budgetEl.value='any';
+      if(activityEl) activityEl.value='any';
+      if(searchEl) searchEl.value='';
+      applyFilters();
+    });
+  }
   
-  recommendBtn.addEventListener('click', recommend);
+  if(recommendBtn) recommendBtn.addEventListener('click', recommend);
   
-  modalClose.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
+  if(modalClose) modalClose.addEventListener('click', closeModal);
+  if(modal) modal.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
   
   document.addEventListener('keydown', (e)=> {
-    if(e.key === 'Escape') closeModal();
+    if(e.key === 'Escape' && modal) closeModal();
   });
   
-  /* Accessibility: smooth scroll for nav links */
+  /* Accessibility: smooth scroll for nav links (only for anchor links) */
   document.querySelectorAll('nav.topnav a').forEach(a=>{
     a.addEventListener('click', (e)=>{
       const href = a.getAttribute('href');
@@ -251,9 +265,11 @@ const DESTINATIONS = [
   
   /* Simple contact form handler */
   const contactForm = document.getElementById('contactForm');
-  contactForm.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    alert('Thank you for contacting TravelBloom!');
-    contactForm.reset();
-  });
+  if(contactForm){
+    contactForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      alert('Thank you for contacting TravelBloom! We will get back to you soon.');
+      contactForm.reset();
+    });
+  }
   

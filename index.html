@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TravelBloom — Home</title>
+  <meta name="description" content="Travel recommendation site with interactive filtering, destination details and multimedia content." />
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style .css">
+</head>
+<body>
+
+<header class="header">
+  <div class="brand" aria-hidden="true">
+    <!-- simple plane icon -->
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 12l20-7-7 7 7 7-20-7z" fill="white"/>
+    </svg>
+    TravelBloom
+  </div>
+
+  <nav class="topnav" role="navigation" aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+
+  <div class="searchbox" role="search" aria-label="Search">
+    <input id="search" placeholder="Enter a destination or keyword" aria-label="Search destinations" />
+    <button id="searchBtn" class="btn">Search</button>
+    <button id="clearBtn" class="btn ghost">Clear</button>
+  </div>
+</header>
+
+<!-- HERO / INTRODUCTION -->
+<section id="home" class="hero" aria-label="Home banner">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>Explore<br>Dream<br>Destination</h1>
+      <p>Welcome to TravelBloom! Discover personalized travel recommendations and multimedia-rich destination pages to plan your memorable trip. Whether you're looking for pristine beaches, ancient temples, or wildlife adventures, we help you find the perfect destination that matches your preferences, budget, and interests.</p>
+      <div class="hero-cta">
+        <button id="recommendBtn" class="btn">Recommend a trip</button>
+      </div>
+    </div>
+    <div style="width:320px;min-width:220px"></div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="container" role="main">
+  <section>
+    <div class="panel" style="margin-bottom:12px">
+      <!-- filters & controls -->
+      <div class="controls" role="region" aria-label="Filters">
+        <div class="control">
+          <label for="climate">Climate</label>
+          <select id="climate">
+            <option value="any">Any</option>
+            <option value="tropical">Tropical</option>
+            <option value="temperate">Temperate</option>
+            <option value="arid">Arid</option>
+            <option value="cold">Cold</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="budget">Budget</label>
+          <select id="budget">
+            <option value="any">Any</option>
+            <option value="low">Low (&lt;$700)</option>
+            <option value="mid">Mid ($700–$2000)</option>
+            <option value="high">High (&gt;$2000)</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="activity">Activity</label>
+          <select id="activity">
+            <option value="any">Any</option>
+            <option value="beach">Beach</option>
+            <option value="hiking">Hiking</option>
+            <option value="culture">Culture</option>
+            <option value="food">Food</option>
+            <option value="wildlife">Wildlife</option>
+          </select>
+        </div>
+
+        <div style="margin-left:auto;display:flex;gap:8px;">
+          <button id="resetFilters" class="btn ghost">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- results grid -->
+    <section id="results" class="grid" aria-live="polite" aria-label="Search results">
+      <!-- JS will inject cards here -->
+    </section>
+  </section>
+
+  <!-- side -->
+  <aside class="side">
+    <div class="panel">
+      <strong>Favorites</strong>
+      <div id="favorites" class="fav-list small">
+        <div class="muted">No favorites yet. Click &quot;Save&quot; on a destination.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <strong>Quick Links</strong>
+      <p class="small"><a href="about.html">About Us</a></p>
+      <p class="small"><a href="contact.html">Contact Us</a></p>
+    </div>
+  </aside>
+</main>
+
+<!-- BEACH RECOMMENDATION (2 images) -->
+<section id="beach" style="max-width:1100px;margin:24px auto;padding:20px">
+  <div class="panel">
+    <h2>Beach Recommendations</h2>
+    <p class="muted">Sun, sand and sea — perfect getaways for beach lovers.</p>
+    <div class="grid">
+      <article class="card">
+        <img src="images/beach image.jpg" alt="Beautiful Beach Destination">
+        <div class="body">
+          <h3>Tropical Beach Paradise</h3>
+          <p class="small muted">Golden beaches, crystal clear waters and vibrant seaside activities for the perfect beach vacation.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="images/wild image.jpg" alt="Coastal Beach View">
+        <div class="body">
+          <h3>Coastal Escape</h3>
+          <p class="small muted">Dramatic coastlines and pristine sandy shores for a relaxing and rejuvenating holiday experience.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- TEMPLE RECOMMENDATION (2 images) -->
+<section id="temples" style="max-width:1100px;margin:24px auto;padding:20px">
+  <div class="panel">
+    <h2>Temple Recommendations</h2>
+    <p class="muted">Peaceful spiritual destinations surrounded by history and culture.</p>
+    <div class="grid">
+      <article class="card">
+        <img src="images/wild image 2.jpg" alt="Historic Temple">
+        <div class="body">
+          <h3>Ancient Temple Complex</h3>
+          <p class="small muted">Walk through historic temple grounds and experience beautifully decorated sacred spaces with rich cultural heritage.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="images/wild image.jpg" alt="Spiritual Shrine">
+        <div class="body">
+          <h3>Serene Shrine</h3>
+          <p class="small muted">Enjoy calm evenings and traditional ceremonies in peaceful temple settings that inspire reflection and tranquility.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTRY-BASED RECOMMENDATION (2 images) -->
+<section id="country" style="max-width:1100px;margin:24px auto;padding:20px">
+  <div class="panel">
+    <h2>Recommendations by Country: India</h2>
+    <p class="muted">Two popular destinations to explore in India.</p>
+    <div class="grid">
+      <article class="card">
+        <img src="images/wild image.jpg" alt="Indian Destination">
+        <div class="body">
+          <h3>Cultural Heritage City</h3>
+          <p class="small muted">Enjoy colourful streets, heritage buildings and rich cultural experiences in this vibrant Indian destination.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="images/wild image 2.jpg" alt="Wildlife Adventure in India">
+        <div class="body">
+          <h3>Wildlife Adventure</h3>
+          <p class="small muted">Experience safaris, national parks and rich natural beauty in India's diverse wildlife sanctuaries.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer><small class="small">© TravelBloom — travel recommendation site</small></footer>
+
+<!-- Destination modal -->
+<div id="modal" class="modal" role="dialog" aria-hidden="true">
+  <div class="panel" role="document">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div>
+        <h2 id="modalTitle" style="margin:0"></h2>
+        <div id="modalSub" class="small muted"></div>
+      </div>
+      <div>
+        <button id="modalClose" class="btn ghost">Close</button>
+      </div>
+    </div>
+
+    <div class="media-grid">
+      <div>
+        <div id="carousel" class="carousel" aria-hidden="false"></div>
+        <p id="modalDesc" class="muted" style="margin-top:12px"></p>
+        <div style="margin-top:12px">
+          <strong>Highlights</strong>
+          <ul id="modalHigh" class="small muted"></ul>
+        </div>
+      </div>
+
+      <aside style="min-width:220px">
+        <div style="background:#f8fbff;padding:12px;border-radius:10px;border:1px solid #fbf0e6">
+          <div style="margin-bottom:8px"><strong id="modalBudget"></strong><div class="small muted">Estimated budget</div></div>
+          <div style="margin-bottom:8px"><strong id="modalClimate"></strong><div class="small muted">Climate</div></div>
+          <div style="margin-bottom:8px"><strong id="modalActivity"></strong><div class="small muted">Popular activity</div></div>
+
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="saveFav" class="btn">Save</button>
+            <button id="openMap" class="btn ghost">Open map</button>
+          </div>
+        </div>
+
+        <div id="modalVideo" style="margin-top:12px"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- External JS -->
+<script src="script.js"></script>
+</body>
+</html>
+
